@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-import qrcode
 import base64
 import io
 
@@ -10,7 +9,7 @@ class BOStatus(models.Model):
     _name = 'claro_bo_op.status'
 
     @api.model
-    def get_bo_assigned_group(self):
+    def get_bo_assigned_group(self):        
         if self.env.user.has_group('claro_oportunidades.group_claro_oportunidades_bo'):
             return True
         elif self.env.user.bo_assigned_ready:

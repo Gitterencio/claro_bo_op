@@ -9,7 +9,8 @@
     'depends': ['base', 'web','claro_oportunidades'],
     'data': [
         'data/bo_assigned_op_cron_task.xml',
-        'security/ir.model.access.csv'
+        'security/ir.model.access.csv',
+        'views/_02_form.xml',
     ],
     'assets': {
         'web.assets_backend': [

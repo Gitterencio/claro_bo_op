@@ -1,0 +1,106 @@
+<odoo>
+    <data>
+
+<record id="oportunidad_form_view_vn" model="ir.ui.view">
+  <field name="name">claro_bo_op.oportunidad_form_view_cn</field>
+  <field name="model">claro_oportunidades.oportunidad</field>
+  <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_vn" />
+  <field name="arch" type="xml">
+    <xpath expr="//field[@name='supervisor']" position="after">
+       <field name="bo_assigned_user" readonly="1" force_save="1"/>
+    </xpath>
+  </field>
+</record>
+
+<record id="oportunidad_form_view_porta" model="ir.ui.view">
+  <field name="name">claro_bo_op.oportunidad_form_view_porta</field>
+  <field name="model">claro_oportunidades.oportunidad</field>
+  <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_porta" />
+  <field name="arch" type="xml">
+    <xpath expr="//field[@name='supervisor']" position="after">
+       <field name="bo_assigned_user" readonly="1" force_save="1"/>
+    </xpath>
+  </field>
+</record>
+
+<record id="oportunidad_form_view_multi" model="ir.ui.view">
+  <field name="name">claro_bo_op.oportunidad_form_view_multi</field>
+  <field name="model">claro_oportunidades.oportunidad</field>
+  <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_multi" />
+  <field name="arch" type="xml">
+    <xpath expr="//field[@name='supervisor']" position="after">
+       <field name="bo_assigned_user" readonly="1" force_save="1"/>
+    </xpath>
+  </field>
+</record>
+
+<record id="oportunidad_form_view_rn" model="ir.ui.view">
+  <field name="name">claro_bo_op.oportunidad_form_view_rn</field>
+  <field name="model">claro_oportunidades.oportunidad</field>
+  <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_rn" />
+  <field name="arch" type="xml">
+    <xpath expr="//field[@name='supervisor']" position="after">
+       <field name="bo_assigned_user" readonly="1" force_save="1"/>
+    </xpath>
+  </field>
+</record>
+
+<record id="oportunidad_form_view_rnmulti" model="ir.ui.view">
+  <field name="name">claro_bo_op.oportunidad_form_view_rnmulti</field>
+  <field name="model">claro_oportunidades.oportunidad</field>
+  <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_rnmulti" />
+  <field name="arch" type="xml">
+    <xpath expr="//field[@name='supervisor']" position="after">
+       <field name="bo_assigned_user" readonly="1" force_save="1"/>
+    </xpath>
+  </field>
+</record>
+
+<record id="oportunidad_form_view_upsellmulti" model="ir.ui.view">
+  <field name="name">claro_bo_op.oportunidad_form_view_upsellmulti</field>
+  <field name="model">claro_oportunidades.oportunidad</field>
+  <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_upsellmulti" />
+  <field name="arch" type="xml">
+    <xpath expr="//field[@name='supervisor']" position="after">
+       <field name="bo_assigned_user" readonly="1" force_save="1"/>
+    </xpath>
+  </field>
+</record>
+
+<record id="oportunidad_form_view_bo" model="ir.ui.view">
+  <field name="name">claro_bo_op.oportunidad_form_view_bo</field>
+  <field name="model">claro_oportunidades.oportunidad</field>
+  <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_bo" />
+  <field name="arch" type="xml">
+    <xpath expr="//field[@name='asesor']" position="after">
+       <field name="bo_assigned_user" readonly="1" force_save="1"/>
+    </xpath>
+  </field>
+</record>
+
+
+        <record id="claro_bo_op_settings_view__oportunidad" model="ir.ui.view">
+            <field name="name">claro_bo_op.res.config.settings.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+               <xpath expr="//div[@id='claro_oportunidades_generar_contratos_text_block']" position="after">
+                       <h2>BO ASSIGNED NOTIFY URL HOST</h2>
+
+                        <div class="row mt16 o_settings_container"
+                            id="claro_bo_op_bo_assigned_text_block">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <label for="bo_assigned_host" />
+                                <field name="bo_assigned_host"
+                                     />
+                                <div class="text-muted">
+                                   URL PARA CHAT DE NOTIFICACION (ENLACE DIRECTO A VENTA)
+                                </div>
+                            </div>
+                        </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
