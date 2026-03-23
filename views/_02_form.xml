@@ -63,6 +63,7 @@
   <field name="arch" type="xml">
     <xpath expr="//field[@name='supervisor']" position="after">
        <field name="bo_assigned_user" readonly="1" force_save="1"/>
+
     </xpath>
   </field>
 </record>
@@ -74,6 +75,12 @@
   <field name="arch" type="xml">
     <xpath expr="//field[@name='asesor']" position="after">
        <field name="bo_assigned_user" readonly="1" force_save="1"/>
+       <!---->
+       <button name="set_assigned_bo_by_self" string="Asignarme" 
+       type="object" class="btn-primary" 
+        attrs="{'invisible':[('bo_assigned_user','!=',False)]}" 
+       confirm="Asignarme la gestion de la venta" 
+       groups="claro_oportunidades.group_claro_oportunidades_bo"/>
     </xpath>
   </field>
 </record>

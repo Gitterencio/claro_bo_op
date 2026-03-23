@@ -1,5 +1,6 @@
 from odoo import api, fields, models, SUPERUSER_ID, _
 from datetime import datetime, timedelta, date
+from dateutil.relativedelta import relativedelta
 from openerp.exceptions import UserError, ValidationError
 from lxml import etree
 import logging
@@ -11,12 +12,70 @@ class oportunidad(models.Model):
 
     bo_assigned_user = fields.Many2one('res.users', string='BackOffice Asignado')
 
+    def set_assigned_bo_by_self(self):
+        data = datetime.now()
+        user_tz_name = self.env.user.tz or self.env.context.get('tz') or 'UTC'
+        user_tz = pytz.timezone(user_tz_name)
+        utc_now = pytz.utc.localize(fields.Datetime.now())
+        local_data = utc_now.astimezone(user_tz)
+        record = self
+        user = self.env['res.users'].sudo().browse(self.env.user.id)
+        
+        if user and user.partner_id:
+            if self.permitir_edicion:
+                 self.write({'bo_assigned_user':user.id})
+            else:
+               self.set_permitir_edicion()
+               self.write({'bo_assigned_user':user.id})
+               self.set_cerrar_edicion()
 
-    
+            user.set_update_asigned(data)            
+            user.set_count_asigned()
+            mensaje_tag = 'LA VENTA {1} FUE ASIGNADA A {0} \n Hora: {2} || Fecha: {3}'.format(user.name,record.nombre,local_data.strftime("%H:%M"), local_data.date())
+            self.send_notify_tag_assigned_bo_user(mensaje_tag,user.partner_id)
+
+       
+            host = "http://localhost:8069"
+            base_url = self.env['ir.config_parameter'].sudo().get_param('claro_bo_op.bo_assigned_host') or host
+
+            menu_id = self.env.ref('claro_oportunidades.menu_root').id
+            action_id = self.env.ref('claro_oportunidades.oportunidad_action_window_bo').id
+
+            url_lista = f"{base_url}/web#id={record.id}&menu_id={menu_id}&action={action_id}&model=claro_oportunidades.oportunidad&view_type=form"
+            message_text = f"""
+                <p>_______________________________________________________________________</p>
+                <p><strong>¡Venta {record.nombre} Asignada!</strong> {local_data.date()} {local_data.strftime("%H:%M")}</p>
+                <p><strong>Campaña</strong>: {record.campania} </p>
+                <p><strong>Nombre del Cliente</strong>: {record.nombre} </p>
+                <p><strong>Creada</strong>: {record.create_date} </p>
+                <p><strong>Asesor</strong>: {record.asesor.name} </p>
+                <p><strong>ID Registro</strong>: {record.id} </p>
+                <div>
+                 <a href="{url_lista}" 
+                    style="background-color: #875A7B; color: white; padding: 8px 16px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                     Ver mis oportunidades asignadas
+                    </a>
+               </div>
+               <p>_______________________________________________________________________</p>
+               """
+            self.send_notify_inbox_assigned_bo_user(user.name,message_text,user.partner_id.id)
+               
+
+        
     #Cuando Odoo ejecuta un método a través de un cron job usando el decorador @api.model (por ejemplo, model.cron_task_assigned_bo()), self representa una instancia vacía del modelo en sí (la clase), no un registro específico de la base de datos
     @api.model
-    def cron_task_assigned_bo(self):
+    def cron_task_assigned_bo(self,anios=0,meses=0,dias=0,fecha=False):
         data = datetime.now()
+        limit_data = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        if fecha:
+            datepart = fecha.split("-")
+            limit_data = datetime(year=int(datepart[0]),month=int(datepart[1]),day=int(datepart[2]))
+        limit_data = limit_data - relativedelta(months=+meses,days=+dias,years=+anios)
+        #logging.info("#######################")
+        #logging.info(data.date())
+        #logging.info(limit_data)
+
+
         user_tz_name = self.env.user.tz or self.env.context.get('tz') or 'UTC'
         user_tz = pytz.timezone(user_tz_name)
         utc_now = pytz.utc.localize(fields.Datetime.now())
