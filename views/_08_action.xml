@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+   <record model="ir.actions.act_window" id="claro_bo_op.user_stats_action_window">
+            <field name="name">User Stats</field>
+            <field name="res_model">claro_bo_op.user_stats</field>
+            <field name="view_mode">tree,graph,pivot</field>
+          </record>
+
+    </data>
+</odoo>

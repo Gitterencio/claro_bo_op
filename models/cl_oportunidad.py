@@ -20,6 +20,7 @@ class oportunidad(models.Model):
         local_data = utc_now.astimezone(user_tz)
         record = self
         user = self.env['res.users'].sudo().browse(self.env.user.id)
+        user_stat = self.env['claro_bo_op.user_stats'].sudo().search([('bo_assigned_user', '=', self.env.user.id)],limit=1)
         
         if user and user.partner_id:
             if self.permitir_edicion:
@@ -29,8 +30,9 @@ class oportunidad(models.Model):
                self.write({'bo_assigned_user':user.id})
                self.set_cerrar_edicion()
 
-            user.set_update_asigned(data)            
-            user.set_count_asigned()
+            if user_stat:
+                user_stat.set_update_asigned(data)            
+                user_stat.set_count_asigned()
             mensaje_tag = 'LA VENTA {1} FUE ASIGNADA A {0} \n Hora: {2} || Fecha: {3}'.format(user.name,record.nombre,local_data.strftime("%H:%M"), local_data.date())
             self.send_notify_tag_assigned_bo_user(mensaje_tag,user.partner_id)
 
@@ -159,23 +161,22 @@ class oportunidad(models.Model):
     @api.model
     def assigned_bo_user(self,data):
         set_filter=[('bo_assigned_ready', '=', True)]
-        set_order = "bo_assigned_count ASC"  #data ASC, data DESC    
-        users = self.env['res.users'].sudo().search(set_filter,order=set_order)
-        
-        if users:
-            user = users[0]
-    
+        set_order = "bo_assigned_active_count ASC"  #data ASC, data DESC            
+        user_stat = self.env['claro_bo_op.user_stats'].sudo().search(set_filter,order=set_order,limit=1)
+        #users = self.env['res.users'].sudo().search(set_filter,order=set_order)
+        #user = self.env['res.users'].sudo().browse(self.env.user.id)
+        if user_stat:
             if self.permitir_edicion:
-                 self.write({'bo_assigned_user':user.id})
+                 self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})
             else:
                self.set_permitir_edicion()
-               self.write({'bo_assigned_user':user.id})
+               self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})
                self.set_cerrar_edicion()
 
-            user.set_update_asigned(data)            
-            user.set_count_asigned()
+            user_stat.set_update_asigned(data)            
+            user_stat.set_count_asigned()
 #
-            return user
+            return user_stat.bo_assigned_user
         
         return False
     
@@ -185,7 +186,7 @@ class oportunidad(models.Model):
         result = super(oportunidad, self).fields_view_get(view_id, view_type, toolbar=toolbar, submenu=submenu)
         doc = etree.XML(result['arch'])
         user = self.env['res.users'].sudo().browse(self.env.uid)
-        logging.info("#######################")
+
         if self._uid == SUPERUSER_ID or user.has_group('claro_oportunidades.group_claro_oportunidades_administrador'):
             if doc.xpath("//field[@name='bo_assigned_user']"):
                 cals = doc.xpath("//field[@name='bo_assigned_user']")[0]

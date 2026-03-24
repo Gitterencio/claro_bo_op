@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <!-- MENU -->
+        <menuitem name="User BO Stats" sequence="1" id="claro_bo_op.menu_root"
+            web_icon="claro_bo_op,static/description/icon.png" />
+        <!-- SUB MENUS -->
+        <menuitem name="Stats" 
+        sequence="10" id="claro_bo_op.user_stats_menu"
+            parent="claro_bo_op.menu_root"
+            action="claro_bo_op.user_stats_action_window" />
+
+    </data>
+</odoo>

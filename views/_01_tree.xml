@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="claro_bo_op.user_stats_list_view">
+            <field name="name">claro_bo_op.user_stats.view.tree</field>
+            <field name="model">claro_bo_op.user_stats</field>
+            <field name="arch" type="xml">
+                <tree create="0">
+
+                    <field name="bo_assigned_user" readonly="1" force_save="1"/>
+                    <field name="bo_assigned_count" readonly="1" force_save="1"/>
+                    <field name="bo_assigned_active_count" readonly="1" force_save="1"/>
+                    <field name="bo_assigned_ready" readonly="1" force_save="1"/>
+                    <field name="bo_assigned_last" readonly="1" force_save="1"/>
+
+                </tree>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
