@@ -112,6 +112,8 @@ odoo.define('claro_bo_op.status', function (require) {
         template: 'claro_bo_op.status_record_list',
         events: {
             "click": "on_click",
+            "click #show-list-ico": "_onShowList",
+            "click #show-list-ul": "_onShowList",
         },
 
         init: function (parent) {
@@ -122,7 +124,6 @@ odoo.define('claro_bo_op.status', function (require) {
         },
         willStart: function () {
             var self = this;
-      
             return this._super().then(function () {
                 return self.f_get_link_active_record().then(function (res) {
 
@@ -130,6 +131,29 @@ odoo.define('claro_bo_op.status', function (require) {
                 });
             });
         },
+_onShowList: function (ev) {
+    var self = this;
+
+    return this.f_get_link_active_record().then(function (res) {
+        self.links_list = res; 
+        self._updateUI();      
+    });
+},
+
+_updateUI: function () {
+    // Buscamos el contenedor específico
+    var $container = this.$('.js_link_container');
+    
+    if ($container.length) {
+        // Renderizamos SOLO la parte de la lista
+        var newHtml = QWeb.render('claro_bo_op.status_record_list_items', {
+            widget: this
+        });
+        
+        // Reemplazamos el contenido anterior con el nuevo
+        $container.html(newHtml);
+    }
+},
 
         /**
          * @override

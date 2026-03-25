@@ -20,7 +20,7 @@ class BOUserStats(models.Model):
     def _compute_capacity(self):
         for rec in self:
             rec.has_capacity = rec.bo_assigned_active_limit == 0 or rec.bo_assigned_active_limit > rec.bo_assigned_active_count
-    
+            
     def set_count_asigned(self):
         set_filter=[('bo_assigned_user', '=', self.bo_assigned_user.id)]
         set_filter_active=[('bo_assigned_user', '=', self.bo_assigned_user.id)]
