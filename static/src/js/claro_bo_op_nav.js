@@ -22,7 +22,7 @@ odoo.define('claro_bo_op.status', function (require) {
          */
         start: function () {
             var self = this;
-            
+
             // Inicializamos ocultando elementos usando el selector local this.$
             this.$('#alert').hide();
             this.$('#bo_status_green_on').hide();
@@ -37,7 +37,7 @@ odoo.define('claro_bo_op.status', function (require) {
 
         // Helper para centralizar la actualización de la UI
         _update_ui_status: function (isActive) {
-           
+
             if (isActive) {
                 this.$('#bo_status_green_on').show();
                 this.$('#bo_status_red_off').hide();
@@ -61,7 +61,7 @@ odoo.define('claro_bo_op.status', function (require) {
                 method: 'set_desactive_status',
                 args: []
             }).then(function (result) {
-                self._update_ui_status(result); 
+                self._update_ui_status(result);
             });
         },
 
@@ -94,7 +94,7 @@ odoo.define('claro_bo_op.status', function (require) {
                 method: 'get_bo_assigned_group',
                 args: []
             }).then(function (result) {
-              
+
                 if (!result) {
                     self.$('#bo_status_green_on').hide();
                     self.$('#bo_status_red_off').hide();
@@ -104,12 +104,90 @@ odoo.define('claro_bo_op.status', function (require) {
             });
         },
 
-    
+
+    });
+
+
+    var Status_record_list = Widget.extend({
+        template: 'claro_bo_op.status_record_list',
+        events: {
+            "click": "on_click",
+        },
+
+        init: function (parent) {
+            this._super(parent);
+
+            this.links_list = [];
+
+        },
+        willStart: function () {
+            var self = this;
+      
+            return this._super().then(function () {
+                return self.f_get_link_active_record().then(function (res) {
+
+                    self.links_list = res;
+                });
+            });
+        },
+
+        /**
+         * @override
+         */
+        start: function () {
+            var self = this;
+
+            this.$('#show-list').hide();
+
+            return this._super.apply(this, arguments).then(function () {
+                return self.f_get_bo_assigned_group();
+            });
+        },
+
+        on_click: function (event) {
+
+            if (!$(event.target).is('i')) {
+                event.stopPropagation();
+            }
+        },
+
+        f_get_link_active_record: function () {
+            var self = this;
+            return rpc.query({
+                model: 'claro_bo_op.status',
+                method: 'get_link_active_record',
+                args: []
+            }).then(function (result) {
+
+                return result
+            });
+        },
+        f_get_bo_assigned_group: function () {
+            var self = this;
+            return rpc.query({
+                model: 'claro_bo_op.status',
+                method: 'get_bo_assigned_group',
+                args: []
+            }).then(function (result) {
+
+                if (!result) {
+                    self.$('#show-list').hide();
+                } else {
+                    self.$('#show-list').show();
+
+                }
+            });
+        },
+
+
     });
 
     SystrayMenu.Items.push(Status_form_btn);
+    SystrayMenu.Items.push(Status_record_list);
+
 
     return {
         Status_form_btn: Status_form_btn,
+        Status_record_list: Status_record_list
     };
 });

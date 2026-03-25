@@ -64,7 +64,6 @@ class oportunidad(models.Model):
                
 
         
-    #Cuando Odoo ejecuta un método a través de un cron job usando el decorador @api.model (por ejemplo, model.cron_task_assigned_bo()), self representa una instancia vacía del modelo en sí (la clase), no un registro específico de la base de datos
     @api.model
     def cron_task_assigned_bo(self,anios=0,meses=0,dias=0,fecha=False):
         data = datetime.now()
@@ -86,7 +85,6 @@ class oportunidad(models.Model):
         for record in oportunidades_sin_asignar:
             user = record.assigned_bo_user(data)
             if user and user.partner_id:
-                #logging.info("#######################")
                 mensaje_tag = 'LA VENTA {1} FUE ASIGNADA A {0} \n Hora: {2} || Fecha: {3}'.format(user.name,record.nombre,local_data.strftime("%H:%M"), local_data.date())
                 self.send_notify_tag_assigned_bo_user(mensaje_tag,user.partner_id)
 
@@ -165,8 +163,6 @@ class oportunidad(models.Model):
         ('bo_assigned_ready', '=', True),
         ('has_capacity', '=', True)]
         user_stat = self.env['claro_bo_op.user_stats'].sudo().search(set_filter, order=set_order, limit=1)
-        #users = self.env['res.users'].sudo().search(set_filter,order=set_order)
-        #user = self.env['res.users'].sudo().browse(self.env.user.id)
         if user_stat:
             if self.permitir_edicion:
                  self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})

@@ -18,4 +18,47 @@
             </a>
         </div>
     </t>
+
+    <t t-name="claro_bo_op.status_record_list">
+          <div class="o_mail_systray_item dropdown">
+            <a id="show-list" style="color:#ffffff;" class="dropdown-toggle o-no-caret" data-toggle="dropdown" data-display="static" aria-expanded="false"
+               title="Ventas en Proceso" href="#" role="button">
+                <i class="fa fa-list-alt" role="img" aria-label="QR"/>
+            </a>
+
+                <ul class="o_mail_navbar_dropdown dropdown-menu dropdown-menu-right" role="menu">
+                <li class="o_mail_navbar_dropdown_top">
+                    <div class="container" style="padding-top: 2px;">
+                        <form class="form_qr" name="f_qr">
+                            <div class="form-group">
+                                <div class="col-100">
+                                    <center>
+                                        <h4>Ventas en Proceso</h4>
+                                        <hr style="border: none; border-bottom: 1px solid gainsboro;"/>
+                                    </center>
+                                </div>
+                            </div>
+                            
+
+                            <t t-if="widget.links_list &amp;&amp; widget.links_list.length > 0">
+                                <div class="form-group">
+                                    <t t-foreach="widget.links_list" t-as="link">
+                                        <div class="col-100">
+                                            <h4>
+                                                <a t-att-href="link.url" title="Check Btn" role="button">
+                                                    <t t-esc="link.text"/>
+                                                </a>
+                                            </h4>
+                                            <hr style="border: none; border-bottom: 1px solid gainsboro;"/>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                        </form>
+                    </div>
+                </li>
+                  </ul>
+          </div>
+            
+    </t>
 </templates>

@@ -77,3 +77,21 @@ class BOStatus(models.Model):
         
         else:
             return False
+
+    @api.model
+    def get_link_active_record(self):
+
+        lista = []
+        host = "http://localhost:8069"
+        base_url = self.env['ir.config_parameter'].sudo().get_param('claro_bo_op.bo_assigned_host') or host
+        menu_id = self.env.ref('claro_oportunidades.menu_root').id
+        action_id = self.env.ref('claro_oportunidades.oportunidad_action_window_bo').id
+
+        set_filter_active=[('bo_assigned_user', '=', self.env.user.id)]
+        records = self.env['claro_oportunidades.oportunidad'].sudo().search(set_filter_active)
+        for record in records:
+            url_lista = f"{base_url}/web#id={record.id}&menu_id={menu_id}&action={action_id}&model=claro_oportunidades.oportunidad&view_type=form"
+            espacios = '\u00A0' * 3
+            lista.append({'text': f'■{espacios}{record.nombre}{espacios}[Tel:{record.num_cont}]{espacios}[ID:{record.id}]', 'url': url_lista})
+
+        return lista
