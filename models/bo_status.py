@@ -62,7 +62,7 @@ class BOStatus(models.Model):
     def set_desactive_status(self):
         user_stat = self.get_user_stats()
         if user_stat:
-            self.env.user.sudo().write({"bo_assigned_ready": False})
+            user_stat.sudo().write({"bo_assigned_ready": False})
             notification = {
                 'title': 'ESTADO DE RECEPCION INACTIVO',
                 'message': f'FUERA DE LA LISTA DE RECEPCION DEVENTAS PARA SEGUIMIENTO',

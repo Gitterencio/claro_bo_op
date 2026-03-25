@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 claro_bo_op,claro_bo_op,model_claro_bo_op_status,,1,1,1,1
-claro_bo_op_us,claro_bo_op_us,model_claro_bo_op_user_stats,,1,1,1,1
+claro_bo_op_us,claro_bo_op_us,model_claro_bo_op_user_stats,,1,1,1,0
+claro_bo_op_usd,claro_bo_op_usd,model_claro_bo_op_user_stats,group_claro_bo_op_stats_administrador,1,1,1,1

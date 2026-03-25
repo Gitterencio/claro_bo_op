@@ -61,7 +61,7 @@ odoo.define('claro_bo_op.status', function (require) {
                 method: 'set_desactive_status',
                 args: []
             }).then(function (result) {
-                self._update_ui_status(result);
+                self._update_ui_status(result); 
             });
         },
 

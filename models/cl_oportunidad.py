@@ -160,9 +160,11 @@ class oportunidad(models.Model):
 
     @api.model
     def assigned_bo_user(self,data):
-        set_filter=[('bo_assigned_ready', '=', True)]
         set_order = "bo_assigned_active_count ASC"  #data ASC, data DESC            
-        user_stat = self.env['claro_bo_op.user_stats'].sudo().search(set_filter,order=set_order,limit=1)
+        set_filter = [
+        ('bo_assigned_ready', '=', True),
+        ('has_capacity', '=', True)]
+        user_stat = self.env['claro_bo_op.user_stats'].sudo().search(set_filter, order=set_order, limit=1)
         #users = self.env['res.users'].sudo().search(set_filter,order=set_order)
         #user = self.env['res.users'].sudo().browse(self.env.user.id)
         if user_stat:

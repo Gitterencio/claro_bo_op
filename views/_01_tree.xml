@@ -4,13 +4,15 @@
             <field name="name">claro_bo_op.user_stats.view.tree</field>
             <field name="model">claro_bo_op.user_stats</field>
             <field name="arch" type="xml">
-                <tree create="0">
+                <tree create="0" editable="top">
 
                     <field name="bo_assigned_user" readonly="1" force_save="1"/>
                     <field name="bo_assigned_count" readonly="1" force_save="1"/>
                     <field name="bo_assigned_active_count" readonly="1" force_save="1"/>
+                    <field name="bo_assigned_active_limit" readonly="1" force_save="1"/>
                     <field name="bo_assigned_ready" readonly="1" force_save="1"/>
                     <field name="bo_assigned_last" readonly="1" force_save="1"/>
+                    <field name="has_capacity" readonly="1" force_save="1" optional="hide"/>
 
                 </tree>
 

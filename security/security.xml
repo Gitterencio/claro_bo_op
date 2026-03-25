@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="claro_bo_op.module_category_claro_bo_op">
+            <field name="name">User Assigned Bo stats</field>
+            <field name="description">Ayuda a gestionar bo assigned stats</field>
+            <field name="sequence">111</field>
+        </record>
+
+
+        <record model="res.groups" id="group_claro_bo_op_stats_lector">
+            <field name="name">Lector</field>
+            <field name="category_id" ref="claro_bo_op.module_category_claro_bo_op" />
+            <field name="comment">USUARIOS</field>
+            <field name="implied_ids" eval="[(4,ref('base.group_user'))]" />
+        </record>
+
+
+        <record model="res.groups" id="group_claro_bo_op_stats_general">
+            <field name="name">Usuario</field>
+            <field name="category_id" ref="claro_bo_op.module_category_claro_bo_op" />
+            <field name="comment">USUARIOS</field>
+            <field name="implied_ids" eval="[(4,ref('group_claro_bo_op_stats_lector'))]" />
+        </record>
+
+
+
+        <record model="res.groups" id="group_claro_bo_op_stats_administrador">
+            <field name="name">Administrador</field>
+            <field name="category_id" ref="claro_bo_op.module_category_claro_bo_op" />
+            <field name="comment">USUARIOS</field>
+            <field name="implied_ids" eval="[(4,ref('group_claro_bo_op_stats_general'))]" />
+            <field name="users" eval="[(4,ref('base.user_root')),(4,ref('base.user_admin'))]" />
+        </record>
+
+
+
+    </data>
+</odoo>

@@ -10,6 +10,7 @@
     'data': [
         'data/bo_assigned_op_cron_task.xml',
         'data/bo_assigned_op_user_stats_cron_task.xml',
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/_01_tree.xml',
         'views/_02_form.xml',
