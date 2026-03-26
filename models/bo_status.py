@@ -3,7 +3,7 @@
 from odoo import models, fields, api, _
 import base64
 import io
-
+import logging
 
 class BOStatus(models.Model):
     _name = 'claro_bo_op.status'
@@ -87,8 +87,9 @@ class BOStatus(models.Model):
         menu_id = self.env.ref('claro_oportunidades.menu_root').id
         action_id = self.env.ref('claro_oportunidades.oportunidad_action_window_bo').id
 
-        set_filter_active=[('bo_assigned_user', '=', self.env.user.id)]
+        set_filter_active=[('ribbon_dynamic_title','!=',"FIN"),('bo_assigned_user', '=', self.env.user.id)]
         records = self.env['claro_oportunidades.oportunidad'].sudo().search(set_filter_active)
+        
         for record in records:
             url_lista = f"{base_url}/web#id={record.id}&menu_id={menu_id}&action={action_id}&model=claro_oportunidades.oportunidad&view_type=form"
             espacios = '\u00A0' * 3

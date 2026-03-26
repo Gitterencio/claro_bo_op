@@ -23,13 +23,19 @@
             <field name="implied_ids" eval="[(4,ref('group_claro_bo_op_stats_lector'))]" />
         </record>
 
+        <record model="res.groups" id="group_claro_bo_op_stats_superior">
+            <field name="name">Superior</field>
+            <field name="category_id" ref="claro_bo_op.module_category_claro_bo_op" />
+            <field name="comment">USUARIOS</field>
+            <field name="implied_ids" eval="[(4,ref('group_claro_bo_op_stats_general'))]" />
+        </record>
 
 
         <record model="res.groups" id="group_claro_bo_op_stats_administrador">
             <field name="name">Administrador</field>
             <field name="category_id" ref="claro_bo_op.module_category_claro_bo_op" />
             <field name="comment">USUARIOS</field>
-            <field name="implied_ids" eval="[(4,ref('group_claro_bo_op_stats_general'))]" />
+            <field name="implied_ids" eval="[(4,ref('group_claro_bo_op_stats_superior'))]" />
             <field name="users" eval="[(4,ref('base.user_root')),(4,ref('base.user_admin'))]" />
         </record>
 

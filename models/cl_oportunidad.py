@@ -11,6 +11,58 @@ class oportunidad(models.Model):
     _inherit = 'claro_oportunidades.oportunidad'
 
     bo_assigned_user = fields.Many2one('res.users', string='BackOffice Asignado')
+    status_op_rec_ids = fields.One2many('claro_bo_op.status_op_rec','oportunidad',string= 'Secuencia Procesos')
+
+    ribbon_dynamic_title = fields.Char(
+        compute='_compute_ui_control', 
+        store=True
+    )
+
+    bo_assigned_last_rec = fields.Char(
+        string='Ultimo Estado',
+        compute='_compute_ui_control', 
+        store=True
+    )
+
+
+    @api.depends('status_op_rec_ids')
+    def _compute_ui_control(self):  
+        for rec in self:
+            titulo="SIN ASIGNAR"
+            last="SIN ASIGNAR"
+            if rec.status_op_rec_ids:
+                titulo = rec.status_op_rec_ids[-1].bo_status_op.process_type
+                last = rec.status_op_rec_ids[-1].bo_status_op.name
+                if (titulo == 'FIN') and not rec.status_op_rec_ids[-1].end_date:
+                    titulo = 'INTERMEDIO'
+            
+            if rec.permitir_edicion:
+                rec.ribbon_dynamic_title = titulo
+                rec.bo_assigned_last_rec = last
+            else:
+               rec.set_permitir_edicion()
+               rec.ribbon_dynamic_title = titulo
+               rec.bo_assigned_last_rec = last
+               rec.set_cerrar_edicion()
+
+    
+    def get_next_status_bo_assigned(self,prime=False):
+        ids_array = self.status_op_rec_ids.mapped('bo_status_op.id')
+        set_filter =[('campania', '=', self.campania),('id', 'not in',ids_array )]
+        
+        if prime:
+            set_filter.append(('process_type',"=",'INICIO'))
+        status = self.env['claro_bo_op.status_op'].sudo().search(set_filter,limit=1)
+        logging.info(set_filter)
+        if not prime:
+            for rec in self.status_op_rec_ids:
+                if not rec.end_date:
+                    rec.end_date = datetime.now()
+        if status:
+            self.env['claro_bo_op.status_op_rec'].sudo().create({'oportunidad':self.id,'start_date':datetime.now(),'bo_status_op':status.id})
+        else:
+            self._compute_ui_control()
+
 
     def set_assigned_bo_by_self(self):
         data = datetime.now()
@@ -25,9 +77,11 @@ class oportunidad(models.Model):
         if user and user.partner_id:
             if self.permitir_edicion:
                  self.write({'bo_assigned_user':user.id})
+                 self.get_next_status_bo_assigned(prime=True)
             else:
                self.set_permitir_edicion()
                self.write({'bo_assigned_user':user.id})
+               self.get_next_status_bo_assigned(prime=True)
                self.set_cerrar_edicion()
 
             if user_stat:
@@ -166,9 +220,11 @@ class oportunidad(models.Model):
         if user_stat:
             if self.permitir_edicion:
                  self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})
+                 self.get_next_status_bo_assigned(prime=True)
             else:
                self.set_permitir_edicion()
                self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})
+               self.get_next_status_bo_assigned(prime=True)
                self.set_cerrar_edicion()
 
             user_stat.set_update_asigned(data)            
@@ -193,6 +249,8 @@ class oportunidad(models.Model):
                 modifiers.update({'readonly': False})
                 cals.set("modifiers", json.dumps(modifiers))
                 cals.set("options",  json.dumps({'clickable': True,'no_create':True,'no_open':True}))
-                
+
+       
+        
         result['arch'] = etree.tostring(doc)
         return result 

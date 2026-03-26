@@ -6,5 +6,11 @@
             <field name="view_mode">tree,graph,pivot</field>
           </record>
 
+   <record model="ir.actions.act_window" id="claro_bo_op.status_op_action_window">
+            <field name="name">Status OP</field>
+            <field name="res_model">claro_bo_op.status_op</field>
+            <field name="view_mode">tree</field>
+          </record>
+
     </data>
 </odoo>

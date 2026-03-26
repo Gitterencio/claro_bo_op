@@ -3,13 +3,19 @@
         <!-- MENU -->
         <menuitem name="User BO Stats" sequence="1" id="claro_bo_op.menu_root"
             web_icon="claro_bo_op,static/description/icon.png"
-            
-             groups="claro_bo_op.group_claro_bo_op_stats_lector" />
+            groups="claro_bo_op.group_claro_bo_op_stats_lector" />
         <!-- SUB MENUS -->
-        <menuitem name="Stats" 
-        sequence="10" id="claro_bo_op.user_stats_menu"
+        <menuitem name="Stats"
+            sequence="10" id="claro_bo_op.user_stats_menu"
             parent="claro_bo_op.menu_root"
             action="claro_bo_op.user_stats_action_window" />
+
+        <menuitem name="Status Op"
+            sequence="11" id="claro_bo_op.status_op_menu"
+            parent="claro_bo_op.menu_root"
+            action="claro_bo_op.status_op_action_window"
+            groups="claro_bo_op.group_claro_bo_op_stats_superior"
+            />
 
     </data>
 </odoo>

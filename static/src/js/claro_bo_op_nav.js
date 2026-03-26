@@ -141,16 +141,12 @@ _onShowList: function (ev) {
 },
 
 _updateUI: function () {
-    // Buscamos el contenedor específico
     var $container = this.$('.js_link_container');
     
     if ($container.length) {
-        // Renderizamos SOLO la parte de la lista
         var newHtml = QWeb.render('claro_bo_op.status_record_list_items', {
             widget: this
         });
-        
-        // Reemplazamos el contenido anterior con el nuevo
         $container.html(newHtml);
     }
 },
@@ -209,9 +205,9 @@ _updateUI: function () {
     SystrayMenu.Items.push(Status_form_btn);
     SystrayMenu.Items.push(Status_record_list);
 
-
     return {
         Status_form_btn: Status_form_btn,
         Status_record_list: Status_record_list
     };
 });
+
