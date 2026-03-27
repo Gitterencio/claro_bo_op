@@ -23,7 +23,7 @@ class BOUserStats(models.Model):
             
     def set_count_asigned(self):
         set_filter=[('bo_assigned_user', '=', self.bo_assigned_user.id)]
-        set_filter_active=[('bo_assigned_user', '=', self.bo_assigned_user.id)]
+        set_filter_active=[('estado_venta','!=',"caida"),('estado_venta','!=',"anulada"),('ribbon_dynamic_title','!=',"FIN"),('bo_assigned_user', '=', self.bo_assigned_user.id)]
         self.bo_assigned_count = self.env['claro_oportunidades.oportunidad'].sudo().search_count(set_filter)
         self.bo_assigned_active_count = self.env['claro_oportunidades.oportunidad'].sudo().search_count(set_filter_active)
 

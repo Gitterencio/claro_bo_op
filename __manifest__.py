@@ -6,7 +6,7 @@
     'version': '0.1',
     'category': 'Uncategorized',
     'website': "",
-    'depends': ['base', 'web','claro_oportunidades'],
+    'depends': ['base', 'web','cl_contr_gen','claro_oportunidades'],
     'data': [
         'data/bo_assigned_op_cron_task.xml',
         'data/bo_assigned_op_user_stats_cron_task.xml',

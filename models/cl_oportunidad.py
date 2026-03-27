@@ -45,6 +45,16 @@ class oportunidad(models.Model):
                rec.bo_assigned_last_rec = last
                rec.set_cerrar_edicion()
 
+    def write(self, values):
+        if 'status_op_rec_ids' in values:
+            logging.info("############ESTAMOS LOCOS ####################")
+            if not self.permitir_edicion:
+               self.set_permitir_edicion()
+               gao = super(oportunidad, self).write(values)
+               self.set_cerrar_edicion()
+               return gao
+        
+        return super(oportunidad, self).write(values)
     
     def get_next_status_bo_assigned(self,prime=False):
         ids_array = self.status_op_rec_ids.mapped('bo_status_op.id')
@@ -57,6 +67,8 @@ class oportunidad(models.Model):
         if not prime:
             for rec in self.status_op_rec_ids:
                 if not rec.end_date:
+                    if rec.rq_respaldo and not rec.respaldo_ids:
+                        raise ValidationError(_(f'Se requiere documento de respaldo en {rec.bo_status_op.name} para continuar.'))
                     rec.end_date = datetime.now()
         if status:
             self.env['claro_bo_op.status_op_rec'].sudo().create({'oportunidad':self.id,'start_date':datetime.now(),'bo_status_op':status.id})

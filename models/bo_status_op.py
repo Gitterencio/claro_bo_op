@@ -11,6 +11,7 @@ class BOStatusOp(models.Model):
     name = fields.Char(string='Etiqueta de Estado')
     sequence = fields.Integer(string='Secuencia',default=10,help="Se ordena de menor a mayor")
     process_type = fields.Selection(string='Tipo', selection=[('INTERMEDIO','INTERMEDIO'),('INICIO','INICIO'),('FIN','FIN')],default="INTERMEDIO")
+    rq_respaldo = fields.Boolean(string='Requiere Respaldo', default=False)
 
     @api.constrains('campania', 'process_type')
     def _check_unique_start_end(self):
@@ -46,4 +47,6 @@ class BOStatusOpRec(models.Model):
     end_date = fields.Datetime(string='Fin Proceso',)
 
     oportunidad = fields.Many2one('claro_oportunidades.oportunidad',ondelete='cascade',string='Oportunidad')
-
+    rq_respaldo = fields.Boolean(string='Respaldo',related='bo_status_op.rq_respaldo', readonly=True)
+    respaldo_ids = fields.Many2many('ir.attachment', string="Documento")
+    
