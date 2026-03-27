@@ -56,7 +56,7 @@ class oportunidad(models.Model):
         
         return super(oportunidad, self).write(values)
     
-    def get_next_status_bo_assigned(self,prime=False):
+    def get_next_status_bo_assigned(self,prime=False,context={}):
         ids_array = self.status_op_rec_ids.mapped('bo_status_op.id')
         set_filter =[('campania', '=', self.campania),('id', 'not in',ids_array )]
         
@@ -71,7 +71,32 @@ class oportunidad(models.Model):
                         raise ValidationError(_(f'Se requiere documento de respaldo en {rec.bo_status_op.name} para continuar.'))
                     rec.end_date = datetime.now()
         if status:
-            self.env['claro_bo_op.status_op_rec'].sudo().create({'oportunidad':self.id,'start_date':datetime.now(),'bo_status_op':status.id})
+            if prime:
+                self.env['claro_bo_op.status_op_rec'].sudo().create({'oportunidad':self.id,'start_date':datetime.now(),'bo_status_op':status.id})
+            else:
+                set_filter.append(('sequence',">=",self.status_op_rec_ids[-1].bo_status_op.sequence))
+                status = self.env['claro_bo_op.status_op'].sudo().search(set_filter,limit=1)
+                form_view_id = self.env.ref("claro_bo_op.status_op_rec_form_view").id
+
+                context = {}
+                ctx = context.copy()
+                
+                ctx.update({'default_oportunidad': self.id})
+                ctx.update({'default_start_date': datetime.now()})
+                ctx.update({'default_bo_status_op': status.id})
+                #'context': ctx,
+                return {
+                    'name': 'Actualizar Estado',
+                    'type': 'ir.actions.act_window',
+                    'view_mode': 'form',
+                    'res_model': 'claro_bo_op.status_op_rec',
+                    'views': [(form_view_id, 'form')],
+                    'view_id': False,
+                    'type': 'ir.actions.act_window',
+                    'nodestroy':False,
+                    'target': 'new',
+                    'context': ctx,
+                }
         else:
             self._compute_ui_control()
 

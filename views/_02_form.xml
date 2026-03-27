@@ -75,11 +75,11 @@
       <field name="arch" type="xml">
         <xpath expr="//notebook" position="before">
           <widget name="web_ribbon" title="ASIGNADO" bg_color="bg-info"  attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INICIO')]}" />
-          <widget name="web_ribbon" title="EN PROCESO" bg_color="bg-warning"  attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INTERMEDIO')]}" />
+          <widget name="web_ribbon" title="EN PROCESO" bg_color="bg-warning"  attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INTERMEDIO-SUB'),('ribbon_dynamic_title', '!=', 'INTERMEDIO')]}" />
           <widget name="web_ribbon" title="TERMINADO" bg_color="bg-success"  attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'FIN')]}" />
            <field name="ribbon_dynamic_title" invisible="1" readonly="1" force_save="1" />
         </xpath>
- <!-- attrs="{'invisible': [('active', '=', True),('rechazado', '=', False)]}" -->
+ <!-- attrs="{'invisible': [('active', '=', True),('rechazado', '=', False)]}"  -->
         <xpath expr="//field[@name='asesor']" position="after">
            <field name="bo_assigned_user" readonly="1" force_save="1" />
          
@@ -157,6 +157,28 @@
         </xpath>
       </field>
     </record>
+
+<record model="ir.ui.view" id="claro_bo_op.status_op_rec_form_view">
+    <field name="name">claro_bo_op.status_op_rec.view.form</field>
+    <field name="model">claro_bo_op.status_op_rec</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <field name="bo_status_op"  options="{ &quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                    <field name="start_date" readonly="1" force_save="1"/>
+                    <field name="end_date" readonly="1" force_save="1"/>
+                    <field name="oportunidad" readonly="1" force_save="1"/>
+                    <field name="rq_respaldo" readonly="1" force_save="1"/>
+                </group>
+            </sheet>
+            <footer>
+                <button name="action_save_and_close" string="Guardar" type="object" class="btn-primary" data-hotkey="q"/>
+                <button string="Cancelar" class="btn-secondary" special="cancel" data-hotkey="z"/>
+            </footer>
+        </form>
+    </field>
+</record>
 
   </data>
 </odoo>
