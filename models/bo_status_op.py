@@ -13,6 +13,7 @@ class BOStatusOp(models.Model):
     sequence = fields.Integer(string='Secuencia',default=10,help="Se ordena de menor a mayor")
     process_type = fields.Selection(string='Tipo', selection=[('INTERMEDIO','INTERMEDIO'),('INTERMEDIO-SUB','INTERMEDIO-SUB'),('INICIO','INICIO'),('FIN','FIN')],default="INTERMEDIO")
     rq_respaldo = fields.Boolean(string='Requiere Respaldo', default=False)
+    active = fields.Boolean(string='Activo', default=True)
 
     @api.constrains('campania', 'process_type')
     def _check_unique_start_end(self):
@@ -73,7 +74,8 @@ class BOStatusOpRec(models.Model):
                 'domain': {
                     'bo_status_op': [
                         ('campania', '=', self.oportunidad.campania), # Referencia a status_op.campania
-                        ('id', 'not in', used_status_ids)
+                        ('id', 'not in', used_status_ids),
+                        ('active', '=', True)
                     ]
                 }
             }
