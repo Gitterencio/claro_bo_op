@@ -15,7 +15,12 @@
             <div class="oe_button_box" name="button_box">
               <button name="set_need_assigned"
                 string="Solicitar Gestion" type="object"
-                class="btn-danger" icon="fa-user-plus" />
+                class="btn-danger" icon="fa-user-plus"
+                 attrs="{'invisible': [('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+                />
+
+                  <field name="bo_assigned_await" invisible="1" />
+                  <field name="bo_assigned_user" invisible="1" />
             </div>
 
           </group>
@@ -32,6 +37,23 @@
         <xpath expr="//field[@name='supervisor']" position="after">
           <field name="bo_assigned_user" readonly="1" force_save="1" />
         </xpath>
+
+           <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                 attrs="{'invisible': [('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+                />
+
+                  <field name="bo_assigned_await" invisible="1" />
+                  <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
+        </xpath>
       </field>
     </record>
 
@@ -42,6 +64,22 @@
       <field name="arch" type="xml">
         <xpath expr="//field[@name='supervisor']" position="after">
           <field name="bo_assigned_user" readonly="1" force_save="1" />
+        </xpath>
+           <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                 attrs="{'invisible': [('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+                />
+
+                  <field name="bo_assigned_await" invisible="1" />
+                  <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
         </xpath>
       </field>
     </record>
@@ -54,6 +92,22 @@
         <xpath expr="//field[@name='supervisor']" position="after">
           <field name="bo_assigned_user" readonly="1" force_save="1" />
         </xpath>
+           <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                 attrs="{'invisible': [('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+                />
+
+                  <field name="bo_assigned_await" invisible="1" />
+                  <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
+        </xpath>
       </field>
     </record>
 
@@ -65,6 +119,22 @@
         <xpath expr="//field[@name='supervisor']" position="after">
           <field name="bo_assigned_user" readonly="1" force_save="1" />
         </xpath>
+           <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                 attrs="{'invisible': [('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+                />
+
+                  <field name="bo_assigned_await" invisible="1" />
+                  <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
+        </xpath>
       </field>
     </record>
 
@@ -75,6 +145,22 @@
       <field name="arch" type="xml">
         <xpath expr="//field[@name='supervisor']" position="after">
           <field name="bo_assigned_user" readonly="1" force_save="1" />
+
+        </xpath>
+           <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                 attrs="{'invisible': [('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+                />
+
+                  <field name="bo_assigned_await" invisible="1" />
+                  <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
 
         </xpath>
       </field>
