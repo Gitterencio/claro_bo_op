@@ -9,6 +9,18 @@
         <xpath expr="//field[@name='supervisor']" position="after">
           <field name="bo_assigned_user" readonly="1" force_save="1" />
         </xpath>
+
+        <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus" />
+            </div>
+
+          </group>
+
+        </xpath>
       </field>
     </record>
 
@@ -74,15 +86,18 @@
       <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_bo" />
       <field name="arch" type="xml">
         <xpath expr="//notebook" position="before">
-          <widget name="web_ribbon" title="ASIGNADO" bg_color="bg-info"  attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INICIO')]}" />
-          <widget name="web_ribbon" title="EN PROCESO" bg_color="bg-warning"  attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INTERMEDIO-SUB'),('ribbon_dynamic_title', '!=', 'INTERMEDIO')]}" />
-          <widget name="web_ribbon" title="TERMINADO" bg_color="bg-success"  attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'FIN')]}" />
-           <field name="ribbon_dynamic_title" invisible="1" readonly="1" force_save="1" />
+          <widget name="web_ribbon" title="ASIGNADO" bg_color="bg-info"
+            attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INICIO')]}" />
+          <widget name="web_ribbon" title="EN PROCESO" bg_color="bg-warning"
+            attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INTERMEDIO-SUB'),('ribbon_dynamic_title', '!=', 'INTERMEDIO')]}" />
+          <widget name="web_ribbon" title="TERMINADO" bg_color="bg-success"
+            attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'FIN')]}" />
+          <field name="ribbon_dynamic_title" invisible="1" readonly="1" force_save="1" />
         </xpath>
- <!-- attrs="{'invisible': [('active', '=', True),('rechazado', '=', False)]}"  -->
+        <!-- attrs="{'invisible': [('active', '=', True),('rechazado', '=', False)]}"  -->
         <xpath expr="//field[@name='asesor']" position="after">
-           <field name="bo_assigned_user" readonly="1" force_save="1" />
-         
+          <field name="bo_assigned_user" readonly="1" force_save="1" />
+
           <button name="set_assigned_bo_by_self" string="Asignarme"
             type="object" class="btn-primary"
             attrs="{'invisible':[('bo_assigned_user','!=',False)]}"
@@ -90,14 +105,15 @@
             groups="claro_oportunidades.group_claro_oportunidades_bo" />
         </xpath>
 
-         <xpath expr="//field[@name='supervisor']" position="after">
-           <field name="bo_assigned_last_rec" readonly="1" force_save="1" />
+        <xpath expr="//field[@name='supervisor']" position="after">
+          <field name="bo_assigned_last_rec" readonly="1" force_save="1" />
         </xpath>
 
-          <xpath expr="//button[@name='set_permitir_edicion']" position="before">
-            <button name="get_next_status_bo_assigned"
-                  string="Siguiente" type="object"
-                class="btn-danger" icon="fa-arrow-right" attrs="{'invisible': [('ribbon_dynamic_title', '=', 'FIN')]}" />
+        <xpath expr="//button[@name='set_permitir_edicion']" position="before">
+          <button name="get_next_status_bo_assigned"
+            string="Siguiente" type="object"
+            class="btn-danger" icon="fa-arrow-right"
+            attrs="{'invisible': [('ribbon_dynamic_title', '=', 'FIN')]}" />
         </xpath>
 
         <!-- op_contratos-->
@@ -111,23 +127,23 @@
 
                 <button name="get_next_status_bo_assigned"
                   string="Siguiente" type="object"
-                class="btn-danger" icon="fa-arrow-right" attrs="{'invisible': [('ribbon_dynamic_title', '=', 'FIN')]}"/>
+                  class="btn-danger" icon="fa-arrow-right"
+                  attrs="{'invisible': [('ribbon_dynamic_title', '=', 'FIN')]}" />
               </div>
             </group>
-            
-              <field  name="status_op_rec_ids" mode="tree">
-                <tree editable="top" create="0">
-                  <field name="bo_status_op"  readonly="1" force_save="1"/>
-                  <field name="start_date"  readonly="1" force_save="1"/>
-                  <field name="end_date"  readonly="1" force_save="1"/>
-                  <field name="rq_respaldo"  readonly="1" force_save="1"/>
-                  <field name="respaldo_ids"  widget="many2many_binary" />
-                  
-                </tree>
-              </field>
+
+            <field name="status_op_rec_ids" mode="tree">
+              <tree editable="top" create="0">
+                <field name="bo_status_op" readonly="1" force_save="1" />
+                <field name="start_date" readonly="1" force_save="1" />
+                <field name="end_date" readonly="1" force_save="1" />
+                <field name="rq_respaldo" readonly="1" force_save="1" />
+                <field name="respaldo_ids" widget="many2many_binary" />
+
+              </tree>
+            </field>
 
 
-        
           </page>
 
         </xpath>
@@ -158,27 +174,29 @@
       </field>
     </record>
 
-<record model="ir.ui.view" id="claro_bo_op.status_op_rec_form_view">
-    <field name="name">claro_bo_op.status_op_rec.view.form</field>
-    <field name="model">claro_bo_op.status_op_rec</field>
-    <field name="arch" type="xml">
+    <record model="ir.ui.view" id="claro_bo_op.status_op_rec_form_view">
+      <field name="name">claro_bo_op.status_op_rec.view.form</field>
+      <field name="model">claro_bo_op.status_op_rec</field>
+      <field name="arch" type="xml">
         <form>
-            <sheet>
-                <group>
-                    <field name="bo_status_op"  options="{ &quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
-                    <field name="start_date" readonly="1" force_save="1"/>
-                    <field name="end_date" readonly="1" force_save="1"/>
-                    <field name="oportunidad" readonly="1" force_save="1"/>
-                    <field name="rq_respaldo" readonly="1" force_save="1"/>
-                </group>
-            </sheet>
-            <footer>
-                <button name="action_save_and_close" string="Guardar" type="object" class="btn-primary" data-hotkey="q"/>
-                <button string="Cancelar" class="btn-secondary" special="cancel" data-hotkey="z"/>
-            </footer>
+          <sheet>
+            <group>
+              <field name="bo_status_op"
+                options="{ &quot;no_open&quot;: True, &quot;no_create&quot;: True}" />
+              <field name="start_date" readonly="1" force_save="1" />
+              <field name="end_date" readonly="1" force_save="1" />
+              <field name="oportunidad" readonly="1" force_save="1" />
+              <field name="rq_respaldo" readonly="1" force_save="1" />
+            </group>
+          </sheet>
+          <footer>
+            <button name="action_save_and_close" string="Guardar" type="object" class="btn-primary"
+              data-hotkey="q" />
+            <button string="Cancelar" class="btn-secondary" special="cancel" data-hotkey="z" />
+          </footer>
         </form>
-    </field>
-</record>
+      </field>
+    </record>
 
   </data>
 </odoo>

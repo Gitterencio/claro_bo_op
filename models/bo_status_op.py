@@ -68,7 +68,9 @@ class BOStatusOpRec(models.Model):
  
         if self.oportunidad:
             # IDs de estados que ya se usaron
-            used_status_ids = self.oportunidad.status_op_rec_ids.mapped('bo_status_op').ids
+            used_status_ids =[]
+            if self.oportunidad.status_op_rec_ids:
+                used_status_ids = self.oportunidad.status_op_rec_ids.mapped('bo_status_op').ids
             
             return {
                 'domain': {

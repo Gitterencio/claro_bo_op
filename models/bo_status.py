@@ -20,7 +20,7 @@ class BOStatus(models.Model):
             if not user_stat:
                 self.env['claro_bo_op.user_stats'].sudo().create({'bo_assigned_user': self.env.user.id})
             return True
-        elif self.env.user.bo_assigned_ready:
+        else:
             user_stat = self.get_user_stats()
             if user_stat:
                 user_stat.sudo().write({"bo_assigned_ready": False})

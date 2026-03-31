@@ -9,7 +9,7 @@ import json
 
 class oportunidad(models.Model):
     _inherit = 'claro_oportunidades.oportunidad'
-
+    bo_assigned_await = fields.Boolean(string='Asignacion Solicitada', default=False)
     bo_assigned_user = fields.Many2one('res.users', string='BackOffice Asignado')
     status_op_rec_ids = fields.One2many('claro_bo_op.status_op_rec','oportunidad',string= 'Secuencia Procesos')
 
@@ -57,7 +57,9 @@ class oportunidad(models.Model):
         return super(oportunidad, self).write(values)
     
     def get_next_status_bo_assigned(self,prime=False,context={}):
-        ids_array = self.status_op_rec_ids.mapped('bo_status_op.id')
+        ids_array= []
+        if self.status_op_rec_ids:
+            ids_array = self.status_op_rec_ids.mapped('bo_status_op.id')
         set_filter =[('campania', '=', self.campania),('id', 'not in',ids_array )]
         
         if prime:
@@ -74,7 +76,10 @@ class oportunidad(models.Model):
             if prime:
                 self.env['claro_bo_op.status_op_rec'].sudo().create({'oportunidad':self.id,'start_date':datetime.now(),'bo_status_op':status.id})
             else:
-                set_filter.append(('sequence',">=",self.status_op_rec_ids[-1].bo_status_op.sequence))
+                idx=-100
+                if self.status_op_rec_ids:
+                    idx = self.status_op_rec_ids[-1].bo_status_op.sequence
+                set_filter.append(('sequence',">=",idx))
                 status = self.env['claro_bo_op.status_op'].sudo().search(set_filter,limit=1)
                 form_view_id = self.env.ref("claro_bo_op.status_op_rec_form_view").id
 
@@ -100,6 +105,16 @@ class oportunidad(models.Model):
         else:
             self._compute_ui_control()
 
+    def set_need_assigned(self):
+        if self.permitir_edicion:
+            self.write({'bo_assigned_await':True})
+
+        else:
+            self.set_permitir_edicion()
+            self.write({'bo_assigned_await':True})
+            self.set_cerrar_edicion()
+        
+        self.cron_task_assigned_bo()
 
     def set_assigned_bo_by_self(self):
         data = datetime.now()
@@ -163,7 +178,7 @@ class oportunidad(models.Model):
             datepart = fecha.split("-")
             limit_data = datetime(year=int(datepart[0]),month=int(datepart[1]),day=int(datepart[2]))
         limit_data = limit_data - relativedelta(months=+meses,days=+dias,years=+anios)
-        #logging.info("#######################")
+       
         #logging.info(data.date())
         #logging.info(limit_data)
 
@@ -172,7 +187,9 @@ class oportunidad(models.Model):
         user_tz = pytz.timezone(user_tz_name)
         utc_now = pytz.utc.localize(fields.Datetime.now())
         local_data = utc_now.astimezone(user_tz)
-        oportunidades_sin_asignar = self.search([('bo_assigned_user', '=', False)])
+        oportunidades_sin_asignar = self.search([('bo_assigned_user', '=', False),('bo_assigned_await', '=', True)])
+        logging.info("##########EEEEEEE#############")
+        logging.info(len(oportunidades_sin_asignar))
         for record in oportunidades_sin_asignar:
             user = record.assigned_bo_user(data)
             if user and user.partner_id:
