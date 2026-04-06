@@ -87,7 +87,7 @@ class BOStatus(models.Model):
         menu_id = self.env.ref('claro_oportunidades.menu_root').id
         action_id = self.env.ref('claro_oportunidades.oportunidad_action_window_bo').id
 
-        set_filter_active=[('estado_venta','!=',"caida"),('estado_venta','!=',"anulada"),('ribbon_dynamic_title','!=',"FIN"),('bo_assigned_user', '=', self.env.user.id)]
+        set_filter_active=[('estado_venta','!=',"caida"),('ribbon_dynamic_title','!=',"NO-GESTIONAR"),('estado_venta','!=',"anulada"),('ribbon_dynamic_title','!=',"FIN"),('bo_assigned_user', '=', self.env.user.id)]
         records = self.env['claro_oportunidades.oportunidad'].sudo().search(set_filter_active)
         
         for record in records:

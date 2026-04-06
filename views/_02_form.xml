@@ -178,6 +178,9 @@
             attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INTERMEDIO-SUB'),('ribbon_dynamic_title', '!=', 'INTERMEDIO')]}" />
           <widget name="web_ribbon" title="TERMINADO" bg_color="bg-success"
             attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'FIN')]}" />
+
+            <widget name="web_ribbon" title="NO GESTIONAR" bg_color="bg-danger"
+            attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'NO-GESTIONAR')]}" />
           <field name="ribbon_dynamic_title" invisible="1" readonly="1" force_save="1" />
         </xpath>
         <!-- attrs="{'invisible': [('active', '=', True),('rechazado', '=', False)]}"  -->

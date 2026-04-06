@@ -11,7 +11,7 @@ class BOStatusOp(models.Model):
     campania = fields.Selection(string='Campaña', selection=desp_op.campanias)
     name = fields.Char(string='Etiqueta de Estado')
     sequence = fields.Integer(string='Secuencia',default=10,help="Se ordena de menor a mayor")
-    process_type = fields.Selection(string='Tipo', selection=[('INTERMEDIO','INTERMEDIO'),('INTERMEDIO-SUB','INTERMEDIO-SUB'),('INICIO','INICIO'),('FIN','FIN')],default="INTERMEDIO")
+    process_type = fields.Selection(string='Tipo', selection=[('INTERMEDIO','INTERMEDIO'),('INTERMEDIO-SUB','INTERMEDIO-SUB'),('INICIO','INICIO'),('FIN','FIN'),('NO-GESTIONAR','NO-GESTIONAR')],default="INTERMEDIO")
     rq_respaldo = fields.Boolean(string='Requiere Respaldo', default=False)
     active = fields.Boolean(string='Activo', default=True)
 
@@ -56,7 +56,7 @@ class BOStatusOpRec(models.Model):
     
     @api.onchange('bo_status_op')
     def _onchange_bo_status_op_end(self):
-        if self.bo_status_op and self.bo_status_op.process_type == 'FIN':
+        if self.bo_status_op and (self.bo_status_op.process_type == 'FIN' or self.bo_status_op.process_type == 'NO-GESTIONAR'):
             if not self.end_date:
                 self.end_date = datetime.now()
         else:
