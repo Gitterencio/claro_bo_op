@@ -28,33 +28,64 @@ class oportunidad(models.Model):
     @api.depends('status_op_rec_ids')
     def _compute_ui_control(self):  
         for rec in self:
-            titulo="SIN ASIGNAR"
-            last="SIN ASIGNAR"
+            titulo = "SIN ASIGNAR"
+            last = "SIN ASIGNAR"
+            
             if rec.status_op_rec_ids:
-                titulo = rec.status_op_rec_ids[-1].bo_status_op.process_type
-                last = rec.status_op_rec_ids[-1].bo_status_op.name
-                if (titulo == 'FIN') and not rec.status_op_rec_ids[-1].end_date:
+                ultimo_estado = rec.status_op_rec_ids[-1]
+                
+                # Prevenir errores si bo_status_op está vacío temporalmente
+                if ultimo_estado.bo_status_op:
+                    titulo = ultimo_estado.bo_status_op.process_type or "SIN ASIGNAR"
+                    last = ultimo_estado.bo_status_op.name or "SIN ASIGNAR"
+                    
+                if (titulo == 'FIN') and not ultimo_estado.end_date:
                     titulo = 'INTERMEDIO'
             
-            if rec.permitir_edicion:
-                rec.ribbon_dynamic_title = titulo
-                rec.bo_assigned_last_rec = last
-            else:
-               rec.set_permitir_edicion()
-               rec.ribbon_dynamic_title = titulo
-               rec.bo_assigned_last_rec = last
-               rec.set_cerrar_edicion()
+            # ASIGNACIÓN DIRECTA SIN ROMPER LA CACHÉ
+            # Odoo autoriza esto nativamente por ser un campo compute (store=True)
+            rec.ribbon_dynamic_title = titulo
+            rec.bo_assigned_last_rec = last
+
+    def _limpiar_diccionario_newid(self, data):
+        """
+        Escanea recursivamente los comandos de Odoo y convierte los objetos 
+        virtuales (<NewId origin=X>) en enteros (X).
+        """
+        if isinstance(data, dict):
+            return {k: self._limpiar_diccionario_newid(v) for k, v in data.items()}
+        elif isinstance(data, list):
+            return [self._limpiar_diccionario_newid(v) for v in data]
+        elif isinstance(data, tuple):
+            return tuple(self._limpiar_diccionario_newid(v) for v in data)
+        elif hasattr(data, 'origin') and getattr(data, 'origin', False):
+            return int(data.origin)
+        return data
 
     def write(self, values):
-        if 'status_op_rec_ids' in values:
-            logging.info("############ESTAMOS LOCOS ####################")
+        # 1. Limpiamos los NewId de la interfaz ANTES de pasarlo al padre
+        clean_values = self._limpiar_diccionario_newid(values)
+
+        # 2. Si vienen cambios en la secuencia de procesos (status_op_rec_ids)
+        if 'status_op_rec_ids' in clean_values:
+            
             if not self.permitir_edicion:
-               self.set_permitir_edicion()
-               gao = super(oportunidad, self).write(values)
-               self.set_cerrar_edicion()
-               return gao
+                
+                # EL CABALLO DE TROYA: 
+                # Le inyectamos 'permitir_edicion' al diccionario desde aquí.
+                # El modelo padre leerá esto y dejará pasar el guardado.
+                clean_values['permitir_edicion'] = True
+                
+                # Mandamos los datos limpios y con la llave al padre
+                res = super(oportunidad, self).write(clean_values)
+                
+                # Volvemos a bloquear la edición silenciosamente
+                self.write({'permitir_edicion': False})
+                
+                return res
         
-        return super(oportunidad, self).write(values)
+        # 3. Comportamiento normal si no hay cambios en la secuencia
+        return super(oportunidad, self).write(clean_values)
     
     def get_next_status_bo_assigned(self,prime=False,context={}):
         ids_array= []
@@ -114,7 +145,7 @@ class oportunidad(models.Model):
             self.write({'bo_assigned_await':True})
             self.set_cerrar_edicion()
         
-        self.cron_task_assigned_bo()
+        #self.cron_task_assigned_bo()
 
     def set_assigned_bo_by_self(self):
         data = datetime.now()
@@ -187,7 +218,7 @@ class oportunidad(models.Model):
         user_tz = pytz.timezone(user_tz_name)
         utc_now = pytz.utc.localize(fields.Datetime.now())
         local_data = utc_now.astimezone(user_tz)
-        oportunidades_sin_asignar = self.search([('bo_assigned_user', '=', False),('bo_assigned_await', '=', True)])
+        oportunidades_sin_asignar = self.search([('create_date', '>=', limit_data),('bo_assigned_user', '=', False),('bo_assigned_await', '=', True)])
         logging.info("##########EEEEEEE#############")
         logging.info(len(oportunidades_sin_asignar))
         for record in oportunidades_sin_asignar:
@@ -239,30 +270,31 @@ class oportunidad(models.Model):
             
             
 
-    def send_notify_inbox_assigned_bo_user(self,user_name,mensaje_inbox,partner_id):
-            odoobot_id = self.env.ref('base.partner_root').id 
+    def send_notify_inbox_assigned_bo_user(self, user_name, mensaje_inbox, partner_id):
+        odoobot_id = self.env.ref('base.partner_root').id 
 
-            channel = self.env['mail.channel'].sudo().search([
-                ('channel_type', '=', 'chat'),
-                ('channel_partner_ids', 'in', [partner_id]),
-                ('channel_partner_ids', 'in', [odoobot_id])
-            ], limit=1)
+        channel = self.env['mail.channel'].sudo().search([
+            ('channel_type', '=', 'chat'),
+            ('channel_partner_ids', 'in', [partner_id]),
+            ('channel_partner_ids', 'in', [odoobot_id])
+        ], limit=1)
 
-            if not channel:
-                channel = self.env['mail.channel'].sudo().with_context(mail_create_nosubscribe=True).create({
-                    'channel_partner_ids': [(6, 0, [partner_id, odoobot_id])],
-                    'public': 'private',
-                    'channel_type': 'chat',
-                    'name': f'OdooBot & {user_name} NOTI-BO',
-                })
+        if not channel:
+            # SOLUCIÓN DEFINITIVA: Usar tuplas con el comando 4 (Agregar registro)
+            channel = self.env['mail.channel'].sudo().with_context(mail_create_nosubscribe=True).create({
+                'channel_partner_ids': [(4, partner_id), (4, odoobot_id)], 
+                'public': 'private',
+                'channel_type': 'chat',
+                'name': f'OdooBot & {user_name} NOTI-BO',
+            })
 
-            # 3. Postear el mensaje como si fuera OdooBot
-            channel.sudo().message_post(
-                body=mensaje_inbox,
-                author_id=odoobot_id, # Esto hace que parezca enviado por OdooBot
-                message_type="comment",
-                subtype_xmlid="mail.mt_comment",
-            )
+        # Postear el mensaje como si fuera OdooBot
+        channel.sudo().message_post(
+            body=mensaje_inbox,
+            author_id=odoobot_id, 
+            message_type="comment",
+            subtype_xmlid="mail.mt_comment",
+        )
 
     @api.model
     def assigned_bo_user(self,data):
