@@ -325,27 +325,30 @@ class oportunidad(models.Model):
         set_filter = [
         ('bo_assigned_ready', '=', True),
         ('has_capacity', '=', True)]
-        user_stat = self.env['claro_bo_op.user_stats'].sudo().search(set_filter, order=set_order, limit=1)
-        value = user_stat.bo_assigned_campains
-        campains = value.split(",") if isinstance(value, str) and value else False
-        logging.info(f'CAMPANNAS {campains}')
-        if user_stat and (not campains or self.campania in campains):
-            if self.permitir_edicion:
-                 self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})
-                 self.write({'bo_assigned_date':datetime.now()})
-                 self.get_next_status_bo_assigned(prime=True)
-            else:
-               self.set_permitir_edicion()
-               self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})
-               self.write({'bo_assigned_date':datetime.now()})
-               self.get_next_status_bo_assigned(prime=True)
-               self.set_cerrar_edicion()
+        user_stats = self.env['claro_bo_op.user_stats'].sudo().search(set_filter, order=set_order)
+        for user_stat in user_stats: 
+            value = user_stat.bo_assigned_campains
+            campains = value.split(",") if isinstance(value, str) and value else False
+            logging.info(f'CAMPANNAS {campains} ,{self.campania}')
+            if user_stat and (not campains or self.campania in campains):
+                if self.permitir_edicion:
+                     self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})
+                     self.write({'bo_assigned_date':datetime.now()})
+                     logging.info(f'SE ASIGNA')
+                     self.get_next_status_bo_assigned(prime=True)
+                else:
+                   self.set_permitir_edicion()
+                   self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})
+                   self.write({'bo_assigned_date':datetime.now()})
+                   logging.info(f'SE ASIGNA 22222')
+                   self.get_next_status_bo_assigned(prime=True)
+                   self.set_cerrar_edicion()
 
-            user_stat.set_update_asigned(data)            
-            user_stat.set_count_asigned()
-#
-            return user_stat.bo_assigned_user
-        
+                user_stat.set_update_asigned(data)            
+                user_stat.set_count_asigned()
+#   
+                return user_stat.bo_assigned_user
+
         return False
     
     @api.model
