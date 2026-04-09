@@ -13,6 +13,7 @@ class BOUserStats(models.Model):
     bo_assigned_active_limit = fields.Integer(string='CL BO LIMITE ACTIVAS',help="Conteo de listas asignadas",default=20)
     bo_assigned_ready = fields.Boolean(string='CL BO LISTO',help="Esta disponible para asignacion de ventas",default=False)
     bo_assigned_last = fields.Datetime(string='CL BO ULTIMA ASIGNACION',help="Fecha de la ultima asignacion",default=fields.datetime.today())
+    bo_assigned_campains = fields.Char(string='CAMP PERMITIDAS',help="Conteo de listas asignadas")
 
     has_capacity = fields.Boolean(compute='_compute_capacity', store=True)
 
@@ -55,7 +56,13 @@ class BOUserStats(models.Model):
                 modifiers = json.loads(cals.get("modifiers", '{}'))
                 modifiers.update({'readonly': False})
                 cals.set("modifiers", json.dumps(modifiers))
-                #cals.set("options",  json.dumps({'clickable': True,'no_create':True,'no_open':True}))
+
+            if doc.xpath("//field[@name='bo_assigned_campains']"):
+                cals = doc.xpath("//field[@name='bo_assigned_campains']")[0]
+          
+                modifiers = json.loads(cals.get("modifiers", '{}'))
+                modifiers.update({'readonly': False})
+                cals.set("modifiers", json.dumps(modifiers))
                 
         result['arch'] = etree.tostring(doc)
         return result 

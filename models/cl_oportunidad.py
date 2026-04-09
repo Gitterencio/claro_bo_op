@@ -10,6 +10,8 @@ import json
 class oportunidad(models.Model):
     _inherit = 'claro_oportunidades.oportunidad'
     bo_assigned_await = fields.Boolean(string='Asignacion Solicitada', default=False)
+    bo_assigned_await_date = fields.Datetime(string='Fecha de Solicitud Asignacion')
+    bo_assigned_date = fields.Datetime(string='Fecha de Asignacion')
     bo_assigned_user = fields.Many2one('res.users', string='BackOffice Asignado')
     status_op_rec_ids = fields.One2many('claro_bo_op.status_op_rec','oportunidad',string= 'Secuencia Procesos')
 
@@ -87,6 +89,18 @@ class oportunidad(models.Model):
         # 3. Comportamiento normal si no hay cambios en la secuencia
         return super(oportunidad, self).write(clean_values)
     
+    def delete_assigne_user(self):
+        if self.permitir_edicion:
+            self.bo_assigned_user = False
+            self.status_op_rec_ids.unlink()
+         
+
+        else:
+            self.set_permitir_edicion()
+            self.bo_assigned_user = False
+            self.status_op_rec_ids.unlink()
+            self.set_cerrar_edicion()
+
     def get_next_status_bo_assigned(self,prime=False,context={}):
         ids_array= []
         if self.status_op_rec_ids:
@@ -105,7 +119,9 @@ class oportunidad(models.Model):
                     rec.end_date = datetime.now()
         if status:
             if prime:
-                self.env['claro_bo_op.status_op_rec'].sudo().create({'oportunidad':self.id,'start_date':datetime.now(),'bo_status_op':status.id})
+                ahora = datetime.now()
+                self.env['claro_bo_op.status_op_rec'].sudo().create({'oportunidad':self.id,'start_date':ahora,'bo_status_op':status.id})
+                
             else:
                 idx=-100
                 if self.status_op_rec_ids:
@@ -139,13 +155,18 @@ class oportunidad(models.Model):
     def set_need_assigned(self):
         if self.permitir_edicion:
             self.write({'bo_assigned_await':True})
+            self.write({'bo_assigned_await_date':datetime.now()})
+         
 
         else:
             self.set_permitir_edicion()
             self.write({'bo_assigned_await':True})
+            self.write({'bo_assigned_await_date':datetime.now()})
             self.set_cerrar_edicion()
-        
-        #self.cron_task_assigned_bo()
+        try:
+            self.cron_task_assigned_bo()
+        except:
+            logging.info("##########ERROR EN LA ASINACION SOLICITUD#############")
 
     def set_assigned_bo_by_self(self):
         data = datetime.now()
@@ -160,10 +181,12 @@ class oportunidad(models.Model):
         if user and user.partner_id:
             if self.permitir_edicion:
                  self.write({'bo_assigned_user':user.id})
+                 self.write({'bo_assigned_date':datetime.now()})
                  self.get_next_status_bo_assigned(prime=True)
             else:
                self.set_permitir_edicion()
                self.write({'bo_assigned_user':user.id})
+               self.write({'bo_assigned_date':datetime.now()})
                self.get_next_status_bo_assigned(prime=True)
                self.set_cerrar_edicion()
 
@@ -303,13 +326,18 @@ class oportunidad(models.Model):
         ('bo_assigned_ready', '=', True),
         ('has_capacity', '=', True)]
         user_stat = self.env['claro_bo_op.user_stats'].sudo().search(set_filter, order=set_order, limit=1)
-        if user_stat:
+        value = user_stat.bo_assigned_campains
+        campains = value.split(",") if isinstance(value, str) and value else False
+        logging.info(f'CAMPANNAS {campains}')
+        if user_stat and (not campains or self.campania in campains):
             if self.permitir_edicion:
                  self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})
+                 self.write({'bo_assigned_date':datetime.now()})
                  self.get_next_status_bo_assigned(prime=True)
             else:
                self.set_permitir_edicion()
                self.write({'bo_assigned_user':user_stat.bo_assigned_user.id})
+               self.write({'bo_assigned_date':datetime.now()})
                self.get_next_status_bo_assigned(prime=True)
                self.set_cerrar_edicion()
 
@@ -336,7 +364,7 @@ class oportunidad(models.Model):
                 cals.set("modifiers", json.dumps(modifiers))
                 cals.set("options",  json.dumps({'clickable': True,'no_create':True,'no_open':True}))
 
-       
+  
         
         result['arch'] = etree.tostring(doc)
         return result 

@@ -87,12 +87,12 @@ class BOStatus(models.Model):
         menu_id = self.env.ref('claro_oportunidades.menu_root').id
         action_id = self.env.ref('claro_oportunidades.oportunidad_action_window_bo').id
 
-        set_filter_active=[('estado_venta','!=',"caida"),('ribbon_dynamic_title','!=',"NO-GESTIONAR"),('estado_venta','!=',"anulada"),('ribbon_dynamic_title','!=',"FIN"),('bo_assigned_user', '=', self.env.user.id)]
-        records = self.env['claro_oportunidades.oportunidad'].sudo().search(set_filter_active,order='fecha_ac_inst desc')
+        set_filter_active=[('estado_venta','!=',"caida"),('ribbon_dynamic_title','=',"INICIO"),('estado_venta','!=',"anulada"),('ribbon_dynamic_title','!=',"FIN"),('bo_assigned_user', '=', self.env.user.id)]
+        records = self.env['claro_oportunidades.oportunidad'].sudo().search(set_filter_active,order='bo_assigned_date desc')
         
         for record in records:
             url_lista = f"{base_url}/web#id={record.id}&menu_id={menu_id}&action={action_id}&model=claro_oportunidades.oportunidad&view_type=form"
             espacios = '\u00A0' * 3
-            lista.append({'text': f'■{espacios}{record.nombre}{espacios}[Estado:{record.bo_assigned_last_rec}]{espacios}[ID:{record.id}]', 'url': url_lista})
+            lista.append({'text': f'■[Campaña:{record.campania}]{espacios}{record.nombre}{espacios}[Estado:{record.bo_assigned_last_rec}]{espacios}[ID:{record.id}]', 'url': url_lista})
 
         return lista

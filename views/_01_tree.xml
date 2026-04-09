@@ -9,8 +9,10 @@
                     <field name="bo_assigned_count" readonly="1" force_save="1" />
                     <field name="bo_assigned_active_count" readonly="1" force_save="1" />
                     <field name="bo_assigned_active_limit" readonly="1" force_save="1" />
+                    <field name="bo_assigned_campains" readonly="1" force_save="1" optional="show" />
                     <field name="bo_assigned_ready" readonly="1" force_save="1" />
                     <field name="bo_assigned_last" readonly="1" force_save="1" />
+                    
                     <field name="has_capacity" readonly="1" force_save="1" optional="hide" />
 
                 </tree>

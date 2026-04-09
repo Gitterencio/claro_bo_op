@@ -44,7 +44,7 @@ class BOStatusOpRec(models.Model):
     _name = 'claro_bo_op.status_op_rec'
     _order = 'start_date asc'
     bo_status_op = fields.Many2one('claro_bo_op.status_op', string='Status Op')
-    start_date = fields.Datetime(string='Inicio Proceso', default=fields.datetime.now())
+    start_date = fields.Datetime(string='Inicio Proceso', default=fields.datetime.now)
     end_date = fields.Datetime(string='Fin Proceso',)
     oportunidad = fields.Many2one('claro_oportunidades.oportunidad',ondelete='cascade',string='Oportunidad')
     rq_respaldo = fields.Boolean(string='Respaldo',related='bo_status_op.rq_respaldo', readonly=True)
