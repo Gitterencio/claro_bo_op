@@ -285,7 +285,7 @@ class oportunidad(models.Model):
             notification = {
                 'title': 'ASIGNACION DE VENTA BO',
                 'message': f'{mensaje_tag}',
-                'sticky': True,
+                'sticky': False,
                 'warning': True,
                 }
             self.env['bus.bus']._sendone(partner_id, 'simple_notification', 
