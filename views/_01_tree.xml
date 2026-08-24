@@ -1,0 +1,43 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="claro_bo_op.user_stats_list_view">
+            <field name="name">claro_bo_op.user_stats.view.tree</field>
+            <field name="model">claro_bo_op.user_stats</field>
+            <field name="arch" type="xml">
+                <tree create="0" editable="top">
+                    <field name="bo_assigned_user" readonly="1" force_save="1" />
+                    <field name="bo_assigned_count" readonly="1" force_save="1" />
+                    <field name="bo_assigned_active_count" readonly="1" force_save="1" />
+                    <field name="bo_assigned_active_limit" readonly="1" force_save="1" />
+                    <field name="bo_assigned_campains" readonly="1" force_save="1" optional="show" />
+                    <field name="bo_assigned_ready" readonly="1" force_save="1" />
+                    <field name="bo_assigned_last" readonly="1" force_save="1" />
+                    
+                    <field name="has_capacity" readonly="1" force_save="1" optional="hide" />
+                    <field name="bo_assigned_permise_code" password="True" readonly="1" force_save="1" optional="hide" />
+                    <field name="bo_assigned_login"  readonly="1" force_save="1" optional="hide"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="claro_bo_op.status_op_list_view">
+            <field name="name">claro_bo_op.status_op.view.tree</field>
+            <field name="model">claro_bo_op.status_op</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="sequence" widget="handle" />
+                    <field name="campania" required="1" />
+                    <field name="name" required="1" />
+                    <field name="process_type" required="1" />
+                    <field name="repetir" />
+                    <field name="rq_respaldo" />
+                    <field name="active" widget="boolean_toggle"  optional="show" />
+                </tree>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

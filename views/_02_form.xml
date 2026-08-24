@@ -1,0 +1,376 @@
+<odoo>
+  <data>
+
+    <record id="oportunidad_form_view_vn" model="ir.ui.view">
+      <field name="name">claro_bo_op.oportunidad_form_view_cn</field>
+      <field name="model">claro_oportunidades.oportunidad</field>
+      <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_vn" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='supervisor']" position="after">
+          <field name="bo_assigned_user" readonly="1" force_save="1" />
+          <field name="bo_assigned_date" readonly="1" force_save="1" />
+        </xpath>
+
+        <xpath expr="//field[@name='adj_vtn_ex_ids']" position="after">
+          <field name="bo_assigned_await" readonly="1" force_save="1" />
+          <field name="bo_assigned_await_date" readonly="1" force_save="1" />
+        </xpath>
+
+        <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                attrs="{'invisible': ['|',('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+              />
+
+              <field name="bo_assigned_await" invisible="1" />
+              <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
+        </xpath>
+      </field>
+    </record>
+
+    <record id="oportunidad_form_view_porta" model="ir.ui.view">
+      <field name="name">claro_bo_op.oportunidad_form_view_porta</field>
+      <field name="model">claro_oportunidades.oportunidad</field>
+      <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_porta" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='supervisor']" position="after">
+          <field name="bo_assigned_user" readonly="1" force_save="1" />
+          <field name="bo_assigned_date" readonly="1" force_save="1" />
+        </xpath>
+
+        <xpath expr="//field[@name='adj_vtn_ex_ids']" position="after">
+          <field name="bo_assigned_await" readonly="1" force_save="1" />
+          <field name="bo_assigned_await_date" readonly="1" force_save="1" />
+        </xpath>
+
+        <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                attrs="{'invisible': ['|',('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+              />
+
+              <field name="bo_assigned_await" invisible="1" />
+              <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
+        </xpath>
+      </field>
+    </record>
+
+    <record id="oportunidad_form_view_multi" model="ir.ui.view">
+      <field name="name">claro_bo_op.oportunidad_form_view_multi</field>
+      <field name="model">claro_oportunidades.oportunidad</field>
+      <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_multi" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='supervisor']" position="after">
+          <field name="bo_assigned_user" readonly="1" force_save="1" />
+          <field name="bo_assigned_date" readonly="1" force_save="1" />
+        </xpath>
+
+        <xpath expr="//field[@name='adj_vtn_ex_ids']" position="after">
+          <field name="bo_assigned_await" readonly="1" force_save="1" />
+          <field name="bo_assigned_await_date" readonly="1" force_save="1" />
+        </xpath>
+        <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                attrs="{'invisible': ['|',('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+              />
+
+              <field name="bo_assigned_await" invisible="1" />
+              <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
+        </xpath>
+      </field>
+    </record>
+
+
+        <record id="oportunidad_form_view_overlap" model="ir.ui.view">
+      <field name="name">claro_bo_op.oportunidad_form_view_overlap</field>
+      <field name="model">claro_oportunidades.oportunidad</field>
+      <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_overlap" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='supervisor']" position="after">
+          <field name="bo_assigned_user" readonly="1" force_save="1" />
+          <field name="bo_assigned_date" readonly="1" force_save="1" />
+        </xpath>
+
+        <xpath expr="//field[@name='adj_vtn_ex_ids']" position="after">
+          <field name="bo_assigned_await" readonly="1" force_save="1" />
+          <field name="bo_assigned_await_date" readonly="1" force_save="1" />
+        </xpath>
+        <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                attrs="{'invisible': ['|',('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+              />
+
+              <field name="bo_assigned_await" invisible="1" />
+              <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
+        </xpath>
+      </field>
+    </record>
+
+    <record id="oportunidad_form_view_rn" model="ir.ui.view">
+      <field name="name">claro_bo_op.oportunidad_form_view_rn</field>
+      <field name="model">claro_oportunidades.oportunidad</field>
+      <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_rn" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='supervisor']" position="after">
+          <field name="bo_assigned_user" readonly="1" force_save="1" />
+          <field name="bo_assigned_date" readonly="1" force_save="1" />
+        </xpath>
+
+        <xpath expr="//field[@name='adj_vtn_ex_ids']" position="after">
+          <field name="bo_assigned_await" readonly="1" force_save="1" />
+          <field name="bo_assigned_await_date" readonly="1" force_save="1" />
+        </xpath>
+        <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                attrs="{'invisible': ['|',('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+              />
+
+              <field name="bo_assigned_await" invisible="1" />
+              <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
+        </xpath>
+      </field>
+    </record>
+
+    <record id="oportunidad_form_view_rnmulti" model="ir.ui.view">
+      <field name="name">claro_bo_op.oportunidad_form_view_rnmulti</field>
+      <field name="model">claro_oportunidades.oportunidad</field>
+      <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_rnmulti" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='supervisor']" position="after">
+          <field name="bo_assigned_user" readonly="1" force_save="1" />
+          <field name="bo_assigned_date" readonly="1" force_save="1" />
+        </xpath>
+
+        <xpath expr="//field[@name='adj_vtn_ex_ids']" position="after">
+          <field name="bo_assigned_await" readonly="1" force_save="1" />
+          <field name="bo_assigned_await_date" readonly="1" force_save="1" />
+        </xpath>
+        <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                attrs="{'invisible': ['|',('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+              />
+
+              <field name="bo_assigned_await" invisible="1" />
+              <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
+        </xpath>
+      </field>
+    </record>
+
+    <record id="oportunidad_form_view_upsellmulti" model="ir.ui.view">
+      <field name="name">claro_bo_op.oportunidad_form_view_upsellmulti</field>
+      <field name="model">claro_oportunidades.oportunidad</field>
+      <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_upsellmulti" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='supervisor']" position="after">
+          <field name="bo_assigned_user" readonly="1" force_save="1" />
+          <field name="bo_assigned_date" readonly="1" force_save="1" />
+        </xpath>
+
+        <xpath expr="//field[@name='adj_vtn_ex_ids']" position="after">
+          <field name="bo_assigned_await" readonly="1" force_save="1" />
+          <field name="bo_assigned_await_date" readonly="1" force_save="1" />
+        </xpath>
+        <xpath expr="//notebook" position="before">
+          <group>
+            <div class="oe_button_box" name="button_box">
+              <button name="set_need_assigned"
+                string="Solicitar Gestion" type="object"
+                class="btn-danger" icon="fa-user-plus"
+                attrs="{'invisible': ['|',('bo_assigned_await', '=', True),('bo_assigned_user', '!=', False)]}"
+              />
+
+              <field name="bo_assigned_await" invisible="1" />
+              <field name="bo_assigned_user" invisible="1" />
+            </div>
+
+          </group>
+
+        </xpath>
+      </field>
+    </record>
+
+    <record id="oportunidad_form_view_bo" model="ir.ui.view">
+      <field name="name">claro_bo_op.oportunidad_form_view_bo</field>
+      <field name="model">claro_oportunidades.oportunidad</field>
+      <field name="inherit_id" ref="claro_oportunidades.oportunidad_form_view_bo" />
+      <field name="arch" type="xml">
+        <xpath expr="//notebook" position="before">
+          <widget name="web_ribbon" title="ASIGNADO" bg_color="bg-info"
+            attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INICIO')]}" />
+          <widget name="web_ribbon" title="EN PROCESO" bg_color="bg-warning"
+            attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INTERMEDIO-SUB'),('ribbon_dynamic_title', '!=', 'INTERMEDIO')]}" />
+          <widget name="web_ribbon" title="TERMINADO" bg_color="bg-success"
+            attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'FIN')]}" />
+
+          <widget name="web_ribbon" title="NO GESTIONAR" bg_color="bg-danger"
+            attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'NO-GESTIONAR')]}" />
+          <field name="ribbon_dynamic_title" invisible="1" readonly="1" force_save="1" />
+        </xpath>
+        <!-- attrs="{'invisible': [('active', '=', True),('rechazado', '=', False)]}"  -->
+        <xpath expr="//field[@name='asesor']" position="after">
+          <field name="bo_assigned_user" readonly="1" force_save="1" />
+          <field name="bo_assigned_date" readonly="1" force_save="1" />
+
+          <button name="set_assigned_bo_by_self" string="Asignarme"
+            type="object" class="btn-primary"
+            attrs="{'invisible':[('bo_assigned_user','!=',False)]}"
+            confirm="Asignarme la gestion de la venta"
+            groups="claro_oportunidades.group_claro_oportunidades_administrador" />
+        </xpath>
+
+        <xpath expr="//field[@name='supervisor']" position="after">
+          <field name="bo_assigned_last_rec" readonly="1" force_save="1" />
+          <field name="bo_assigned_await" readonly="1" force_save="1" />
+          <field name="bo_assigned_await_date" readonly="1" force_save="1" />
+        </xpath>
+
+        <xpath expr="//button[@name='set_permitir_edicion']" position="before">
+
+          <button name="delete_assigne_user"
+                  string="Quitar Asignado" type="object"
+                  class="btn-warning" icon="fa-user-times"
+                  confirm="¿Seguro que desea eliminar el agente asignado de este registro?"
+                  groups="claro_bo_op.group_claro_bo_op_stats_general"
+                  attrs="{'invisible': [('ribbon_dynamic_title', '!=', 'INICIO')]}"
+            />
+
+          <button name="get_next_status_bo_assigned"
+            string="Siguiente" type="object"
+            class="btn-danger" icon="fa-arrow-right"
+            attrs="{'invisible': ['|',('bo_assigned_user','=',False),('ribbon_dynamic_title', '=', 'FIN')]}" />
+
+             
+        </xpath>
+
+        <!-- op_contratos-->
+        <xpath expr="//page[@name='cl_cont_contratos']" position="after">
+
+          <page string="Seguimiento BO" name="claro_bo_op_status"
+            groups="claro_oportunidades.group_claro_oportunidades_bo">
+            <group>
+              <div class="oe_button_box" name="button_box"
+                groups="claro_oportunidades.group_claro_oportunidades_bo">
+
+                <button name="get_next_status_bo_assigned"
+                  string="Siguiente" type="object"
+                  class="btn-danger" icon="fa-arrow-right"
+                  attrs="{'invisible': ['|',('bo_assigned_user','=',False),('ribbon_dynamic_title', '=', 'FIN')]}" />
+               
+              </div>
+            </group>
+
+            <field name="status_op_rec_ids" mode="tree">
+              <tree editable="top" create="0">
+                <field name="bo_status_op" readonly="1" force_save="1" />
+                <field name="start_date" readonly="1" force_save="1" />
+                <field name="end_date" readonly="1" force_save="1" />
+                <field name="rq_respaldo" readonly="1" force_save="1" />
+                 <field string="Creador" name="create_uid" />
+                <field name="respaldo_ids" widget="many2many_binary" />
+
+              </tree>
+            </field>
+
+
+          </page>
+
+        </xpath>
+      </field>
+    </record>
+
+
+    <record id="claro_bo_op_settings_view__oportunidad" model="ir.ui.view">
+      <field name="name">claro_bo_op.res.config.settings.form</field>
+      <field name="model">res.config.settings</field>
+      <field name="inherit_id" ref="base.res_config_settings_view_form" />
+      <field name="arch" type="xml">
+        <xpath expr="//div[@id='claro_oportunidades_generar_contratos_text_block']" position="after">
+          <h2>BO ASSIGNED NOTIFY URL HOST</h2>
+
+          <div class="row mt16 o_settings_container"
+            id="claro_bo_op_bo_assigned_text_block">
+            <div class="col-12 col-lg-6 o_setting_box">
+              <label for="bo_assigned_host" />
+              <field name="bo_assigned_host"
+              />
+              <div class="text-muted">
+                URL PARA CHAT DE NOTIFICACION (ENLACE DIRECTO A VENTA)
+              </div>
+            </div>
+          </div>
+        </xpath>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="claro_bo_op.status_op_rec_form_view">
+      <field name="name">claro_bo_op.status_op_rec.view.form</field>
+      <field name="model">claro_bo_op.status_op_rec</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="bo_status_op"
+                options="{ &quot;no_open&quot;: True, &quot;no_create&quot;: True}" />
+              <field name="start_date" readonly="1" force_save="1" />
+              <field name="end_date" readonly="1" force_save="1" />
+              <field name="oportunidad" readonly="1" force_save="1" />
+              <field name="rq_respaldo" readonly="1" force_save="1" />
+            </group>
+          </sheet>
+          <footer>
+            <button name="action_save_and_close" string="Guardar" type="object" class="btn-primary"
+              data-hotkey="q" />
+            <button string="Cancelar" class="btn-secondary" special="cancel" data-hotkey="z" />
+          </footer>
+        </form>
+      </field>
+    </record>
+
+  </data>
+</odoo>
